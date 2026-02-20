@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lady e Gentleman - The Eras We</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fundo com degradê */
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 40%, #fbc2eb 70%, #ffecd2 100%);
+            color: #2c0e18; 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .banner {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+
+        .content {
+            position: absolute;
+            top: 5%; 
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            padding: 0 20px;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6);
+        }
+
+        h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 6vw; 
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 0.9;
+        }
+
+        h2 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 4.5vw;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* Efeito 3D */
+        .slider {
+            position: absolute;
+            width: 200px;
+            height: 300px;
+            top: 30%; 
+            transform-style: preserve-3d;
+            animation: autoRun 40s linear infinite; 
+            z-index: 2;
+        }
+
+        @keyframes autoRun {
+            from { transform: perspective(1000px) rotateX(-16deg) rotateY(0deg); }
+            to { transform: perspective(1000px) rotateX(-16deg) rotateY(360deg); }
+        }
+
+        .item {
+            position: absolute;
+            inset: 0;
+            transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(350px);
+        }
+
+        .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 3px solid #ffffff; 
+            border-radius: 8px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            transition: 0.5s;
+        }
+
+        /* Container para alinhar os botões na base */
+        .buttons-container {
+            position: absolute;
+            bottom: 5%;
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        /* Estilo compartilhado para os botões (Música e Carta) */
+        .action-btn {
+            padding: 12px 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c0e18;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 2px solid #ffffff;
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(5px); 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
+        }
+
+        /* --- css janela carta --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px); /* borra o fundo quando a carta abre */
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #2c0e18;
+            background: none;
+            border: none;
+            font-weight: bold;
+        }
+
+        .carta-titulo {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c0e18;
+        }
+
+        .carta-texto {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a1c2a;
+            text-align: left;
+            white-space: pre-line; 
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="lover.mp3" type="audio/mpeg">
+         navegador não suporta o elemento de áudio.
+    </audio>
+
+    <div class="banner">
+        <div class="content">
+            <h1>Lady and Gentleman</h1>
+            <h2>The Eras We</h2>
+        </div>
+
+        <div class="slider" id="slider">
+            </div>
+
+        <div class="buttons-container">
+            <button id="musicBtn" class="action-btn">🎵 Tocar "Lover"</button>
+            <button id="letterBtn" class="action-btn">💌 Ler Carta</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="letterModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeBtn">&times;</button>
+            <h3 class="carta-titulo">Para você,</h3>
+            
+            <div class="carta-texto">
+Você é como a lua
+A luz de todo o céu é sua
+Tua luz é mais pura
+Você é como a lua
+Seu brilho ninguém segura
+Independe dos dias você sempre está lá
+Transformando minha vida
+De cinza a ciano
+
+Com você tem tudo sido tão diferente 
+Pode dividir,poder te sentir
+Ver o tempo passar,sem me preocupar com o amanhã
+Sem saber o que fazer, sem saber para onde ir
+A vida sem respostas,mas com você pra me fazer sorrir 
+
+Eu tenho a sorte de poder dizer
+Que cada dia com você melhora
+Quero sempre renascer
+Ser meu melhor a cada dia 
+Finalmente consigo entender o que Drummond quis dizer quando disse que 
+"Amar se aprende amando"
+
+    Com amor,
+             Gustavo.
+            </div>
+            </div>
+    </div>
+
+    <script>
+        // Array com as fotos
+        const userPhotos = [
+            "foto1.jfif",
+            "foto2.jfif",
+            "foto3.jfif",
+            "foto4.jfif",
+            "foto5.jfif",
+            "foto6.jfif",
+            "foto7.jfif",
+            "foto8.jfif",
+            "foto9.jfif",
+            "foto10.jfif"
+        ];
+
+        const slider = document.getElementById('slider');
+        const quantity = userPhotos.length;
+        
+        slider.style.setProperty('--quantity', quantity);
+
+        userPhotos.forEach((photoUrl, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+            itemDiv.style.setProperty('--position', index + 1);
+
+            const img = document.createElement('img');
+            img.src = photoUrl;
+            img.alt = `Foto ${index + 1}`;
+
+            itemDiv.appendChild(img);
+            slider.appendChild(itemDiv);
+        });
+
+        // Controle da Música
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = '🎵 Tocar "Lover"';
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = '⏸️ Pausar Música';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Controle da Carta 
+        const letterBtn = document.getElementById('letterBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const letterModal = document.getElementById('letterModal');
+
+        // Abrir a carta
+        letterBtn.addEventListener('click', () => {
+            letterModal.classList.add('show');
+        });
+
+        // Fechar a carta pelo botão X
+        closeBtn.addEventListener('click', () => {
+            letterModal.classList.remove('show');
+        });
+
+        // Fechar a carta clicando fora da caixa branca
+        letterModal.addEventListener('click', (event) => {
+            if (event.target === letterModal) {
+                letterModal.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
