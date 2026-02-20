@@ -194,6 +194,51 @@
             text-align: left;
             white-space: pre-line; 
         }
+
+        /* --- RESPONSIVIDADE PARA CELULARES E TABLETS --- */
+        @media screen and (max-width: 1024px) {
+            .slider {
+                width: 160px;
+                height: 240px;
+            }
+            .item {
+                transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(280px);
+            }
+            h1 { font-size: 8vw; }
+            h2 { font-size: 5vw; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .slider {
+                width: 120px;
+                height: 180px;
+                top: 35%; /* Desce um pouquinho mais para não bater no título */
+            }
+            .item {
+                /* Diminui o raio do círculo para as fotos caberem na tela do celular */
+                transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(180px);
+            }
+            h1 { font-size: 11vw; letter-spacing: -1px; }
+            h2 { font-size: 6vw; }
+            
+            /* Ajuste dos botões para não ficarem espremidos na base */
+            .buttons-container {
+                bottom: 5%;
+                gap: 10px;
+            }
+            .action-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            /* Ajuste da modal da carta para o celular */
+            .modal-content {
+                padding: 30px 20px;
+            }
+            .carta-titulo {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
